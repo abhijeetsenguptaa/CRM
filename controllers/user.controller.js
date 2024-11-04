@@ -1,3 +1,4 @@
+const MyProfileService = require("../services/UserModule/myProfile.service");
 const UserLoginService = require("../services/UserModule/userLogin.service");
 const UserPasswordChangeService = require("../services/UserModule/userPasswordChange.service");
 const UserRegisterService = require("../services/UserModule/userRegister.service");
@@ -84,4 +85,23 @@ async function UserResetPasswordController(req, res) {
     }
 }
 
-module.exports = { UserRegistrationController, UserLoginController, UserPasswordChangeController, UserResetPasswordController };
+async function UserProfileController(req, res) {
+    try {
+        const userID = req.userID;
+
+        const userLogin = await MyProfileService(userID);
+
+        return res.status(userLogin.status ? 200 : 404).json({
+            status: userLogin.status,
+            message: userLogin.message
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Internal Server Error',
+        });
+    }
+}
+
+module.exports = { UserRegistrationController, UserLoginController, UserPasswordChangeController, UserResetPasswordController, UserProfileController };
