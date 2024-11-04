@@ -1,6 +1,7 @@
 const UserLoginService = require("../services/UserModule/userLogin.service");
 const UserPasswordChangeService = require("../services/UserModule/userPasswordChange.service");
 const UserRegisterService = require("../services/UserModule/userRegister.service");
+const UserResetPasswordService = require("../services/UserModule/userResetPassword.service");
 
 async function UserRegistrationController(req, res) {
     try {
@@ -63,4 +64,24 @@ async function UserPasswordChangeController(req, res) {
     }
 }
 
-module.exports = { UserRegistrationController, UserLoginController, UserPasswordChangeController };
+async function UserResetPasswordController(req, res) {
+    try {
+        const { newPassword } = req.body;
+        const userID = req.userID;
+
+        const userLogin = await UserResetPasswordService(userID, newPassword);
+
+        return res.status(userLogin.status ? 200 : 404).json({
+            status: userLogin.status,
+            message: userLogin.message
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Internal Server Error',
+        });
+    }
+}
+
+module.exports = { UserRegistrationController, UserLoginController, UserPasswordChangeController, UserResetPasswordController };

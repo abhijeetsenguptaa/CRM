@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const UserModel = require("../../models/user.model");
-const JsonTokenGenerator = require('../../utils/utils/JsonTokenGenerator.utils');
+const JsonTokenGenerator = require('../../utils/JsonTokenGenerator.utils');
 
 async function UserLoginService(email, password) {
     try {
