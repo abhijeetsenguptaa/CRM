@@ -5,6 +5,7 @@ const cors = require('cors');
 
 // Import database connection configuration
 const connection = require('./configs/connection');
+const userRouter = require('./routes/user.routes');
 
 // Set the port for the server to run on, defaulting to 9000 if not specified in the environment
 const PORT = process.env.PORT || 9000;
@@ -17,6 +18,8 @@ app.use(cors());
 
 // Parse incoming JSON requests
 app.use(express.json());
+
+app.use('/api/users', userRouter);
 
 
 // Synchronize the database connection and start the server
