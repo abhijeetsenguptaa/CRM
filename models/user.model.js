@@ -15,7 +15,7 @@ const UserModel = connection.define('users', {
         allowNull: true
     },
     role: {
-        type: DataTypes.ENUM('manager', 'developer', 'designer', 'customer'),
+        type: DataTypes.ENUM('manager', 'developer', 'designer', 'customer', 'sales'),
         defaultValue: 'customer',
         allowNull: true
     },
