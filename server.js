@@ -17,6 +17,7 @@ const app = express();
 // Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
 
+
 // Parse incoming JSON requests
 app.use(express.json());
 
