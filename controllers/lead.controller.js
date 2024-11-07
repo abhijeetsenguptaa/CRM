@@ -1,3 +1,4 @@
+const AddNotesService = require("../services/LeadModule/addNotes.service");
 const LeadCreationService = require("../services/LeadModule/leadCreation.service");
 const LeadDeleteService = require("../services/LeadModule/leadDelete.service");
 const LeadFetchService = require("../services/LeadModule/leadFetching.service");
@@ -83,4 +84,24 @@ async function LeadDeleteController(req, res) {
     }
 };
 
-module.exports = { LeadCreateController, LeadFetchController, LeadUpdateController, LeadDeleteController };
+async function AddNotesController(req, res) {
+    try {
+        const id = req.params.id;
+        const notes = req.query.notes;
+
+        const leadDelete = await AddNotesService(id, notes);
+
+        return res.status(leadDelete.status ? 200 : 404).json({
+            status: leadDelete.status,
+            message: leadDelete.message
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+module.exports = { LeadCreateController, LeadFetchController, LeadUpdateController, LeadDeleteController, AddNotesController };
