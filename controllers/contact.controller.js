@@ -1,4 +1,5 @@
 const CreateContactService = require("../services/ContactModule/CreateContact.service");
+const GetContactService = require("../services/ContactModule/getContact.service");
 
 
 async function ContactCreateController(req, res) {
@@ -21,4 +22,24 @@ async function ContactCreateController(req, res) {
     }
 };
 
-module.exports = { ContactCreateController };
+async function ContactFetchController(req, res) {
+    try {
+        const { id, leadID, company } = req.query;
+
+        const contactFetch = await GetContactService(id, leadID, company);
+
+        return res.status(contactFetch.status ? 200 : 500).json({
+            status: contactFetch.status,
+            message: contactFetch.message,
+            data: contactFetch.data
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+module.exports = { ContactCreateController, ContactFetchController };
