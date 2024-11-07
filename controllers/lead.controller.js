@@ -1,4 +1,5 @@
 const LeadCreationService = require("../services/LeadModule/leadCreation.service");
+const LeadDeleteService = require("../services/LeadModule/leadDelete.service");
 const LeadFetchService = require("../services/LeadModule/leadFetching.service");
 const LeadUpdateService = require("../services/LeadModule/leadUpdate.service");
 
@@ -63,4 +64,23 @@ async function LeadUpdateController(req, res) {
     }
 };
 
-module.exports = { LeadCreateController, LeadFetchController, LeadUpdateController };
+async function LeadDeleteController(req, res) {
+    try {
+        const id = req.params.id;
+
+        const leadDelete = await LeadDeleteService(id);
+
+        return res.status(leadDelete.status ? 200 : 404).json({
+            status: leadDelete.status,
+            message: leadDelete.message
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+module.exports = { LeadCreateController, LeadFetchController, LeadUpdateController, LeadDeleteController };
