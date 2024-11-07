@@ -1,8 +1,11 @@
+const ContactModel = require("../../models/contact.model");
 const LeadModel = require("../../models/lead.model");
 
-async function LeadCreationService(firstName, lastName, email, phoneNumber, source, status, assignedTo, notes) {
+async function LeadCreationService(firstName, lastName, email, phoneNumber, source, status, assignedTo, notes, company, position) {
     try {
         const newLead = await LeadModel.create({ firstName, lastName, email, phoneNumber, source, status, assignedTo, notes });
+
+        await ContactModel.create({ firstName, email, phoneNumber, leadID: newLead.id, company, position, notes });
 
         return {
             status: true,
