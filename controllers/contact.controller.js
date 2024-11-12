@@ -1,3 +1,4 @@
+const ContactDeleteService = require("../services/ContactModule/contactDelete.service");
 const ContactUpdateService = require("../services/ContactModule/contactUpdate.service");
 const CreateContactService = require("../services/ContactModule/CreateContact.service");
 const GetContactService = require("../services/ContactModule/getContact.service");
@@ -64,4 +65,24 @@ async function ContactUpdateController(req, res) {
     }
 };
 
-module.exports = { ContactCreateController, ContactFetchController, ContactUpdateController };
+async function ContactDeleteController(req, res) {
+    try {
+        const id = req.params.id;
+
+        const contactDelete = await ContactDeleteService(id);
+
+        return res.status(contactDelete.status ? 200 : 500).json({
+            status: contactDelete.status,
+            message: contactDelete.message,
+            data: contactDelete.data
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+module.exports = { ContactCreateController, ContactFetchController, ContactUpdateController, ContactDeleteController };

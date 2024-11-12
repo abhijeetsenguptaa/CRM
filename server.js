@@ -8,6 +8,7 @@ const connection = require('./configs/connection');
 const userRouter = require('./routes/user.routes');
 const leadRouter = require('./routes/lead.routes');
 const contactRouter = require('./routes/contact.routes');
+const accountRouter = require('./routes/account.routes');
 
 // Set the port for the server to run on, defaulting to 9000 if not specified in the environment
 const PORT = process.env.PORT || 9000;
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use('/api/users', userRouter);
 app.use('/api/leads', leadRouter);
 app.use('/api/contacts', contactRouter);
+app.use('/api/accounts', accountRouter);
 
 
 // Synchronize the database connection and start the server
