@@ -1,38 +1,46 @@
 require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
-// Import database connection configuration
+// Import database connection configuration and route modules
 const connection = require('./configs/connection');
 const userRouter = require('./routes/user.routes');
 const leadRouter = require('./routes/lead.routes');
 const contactRouter = require('./routes/contact.routes');
 const accountRouter = require('./routes/account.routes');
+const companyRouter = require('./routes/company.routes');
 
-// Set the port for the server to run on, defaulting to 9000 if not specified in the environment
+// Set the port for the server
 const PORT = process.env.PORT || 9000;
 
-// Create an Express application
+// Initialize the Express application
 const app = express();
 
-// Enable Cross-Origin Resource Sharing (CORS)
-app.use(cors());
+// Middlewares
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(express.json()); // Parse incoming JSON requests
 
+// Serve static files
+app.use('/dashboard', express.static(path.join(__dirname, './crm-frontend/html/template')));
+app.use(express.static(path.join(__dirname, './crm-frontend')));
+app.use('/uploads', express.static('uploads')) // checking the static images.
 
-// Parse incoming JSON requests
-app.use(express.json());
-
+// API routes
 app.use('/api/users', userRouter);
 app.use('/api/leads', leadRouter);
 app.use('/api/contacts', contactRouter);
 app.use('/api/accounts', accountRouter);
+app.use('/api/companies', companyRouter);
 
-
-// Synchronize the database connection and start the server
-connection.sync().then(() => {
-    app.listen(PORT, () => {
-        // Log a message when the server is successfully running
-        console.log(`Server is running on port ${PORT}`);
+// Start the server after database synchronization
+connection.sync()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error('Failed to sync database:', error.message);
     });
-});
+
